@@ -79,20 +79,36 @@
         .question {
             font-size: 1.5rem;
             color: #333;
-            margin-bottom: 40px;
+            margin-bottom: 60px;
             line-height: 1.6;
         }
 
-        .button-group {
+        .button-container {
             display: flex;
-            gap: 20px;
+            gap: 80px;
             justify-content: center;
+            align-items: flex-start;
             position: relative;
+            margin-bottom: 40px;
+        }
+
+        .button-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .button-label {
+            font-size: 0.9rem;
+            color: #666;
+            font-weight: bold;
+            letter-spacing: 1px;
         }
 
         button {
-            padding: 15px 40px;
-            font-size: 1.2rem;
+            padding: 20px 50px;
+            font-size: 1.3rem;
             font-weight: bold;
             border: none;
             border-radius: 50px;
@@ -101,35 +117,43 @@
             color: white;
             position: relative;
             z-index: 5;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        button:active {
+            transform: scale(0.98);
         }
 
         .yes-btn {
             background: linear-gradient(135deg, #ff1493, #ff69b4);
+            min-width: 150px;
         }
 
         .yes-btn:hover {
-            transform: scale(1.1);
-            box-shadow: 0 5px 20px rgba(255, 20, 147, 0.4);
+            transform: scale(1.15);
+            box-shadow: 0 8px 25px rgba(255, 20, 147, 0.5);
         }
 
         .no-btn {
             background: linear-gradient(135deg, #4a90e2, #357abd);
+            min-width: 150px;
             position: absolute;
-            transition: all 0.1s ease;
         }
 
         .no-btn:hover {
-            transform: scale(1.05);
+            transform: scale(1.1);
+            box-shadow: 0 8px 25px rgba(74, 144, 226, 0.5);
         }
 
         /* Success message styles */
         .success-message {
             display: none;
-            font-size: 2rem;
+            font-size: 2.2rem;
             color: #ff1493;
             animation: popIn 0.6s ease;
             font-weight: bold;
             line-height: 1.8;
+            margin-top: 40px;
         }
 
         @keyframes popIn {
@@ -161,6 +185,27 @@
                 opacity: 0;
             }
         }
+
+        /* Floating No Button Styles */
+        .no-btn.floating {
+            position: fixed !important;
+        }
+
+        @media (max-width: 768px) {
+            .button-container {
+                gap: 40px;
+                flex-direction: column;
+            }
+
+            .message {
+                font-size: 2rem;
+            }
+
+            button {
+                padding: 15px 35px;
+                font-size: 1.1rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -169,9 +214,16 @@
     <div class="container" id="container">
         <div class="message" id="mainMessage">❤️ Will you be my Valentine? ❤️</div>
 
-        <div class="button-group" id="buttonGroup">
-            <button class="yes-btn" onclick="handleYes()">Yes</button>
-            <button class="no-btn" id="noBtn" onclick="handleNo()">No</button>
+        <div class="button-container" id="buttonContainer">
+            <div class="button-wrapper">
+                <div class="button-label">YES</div>
+                <button class="yes-btn" onclick="handleYes()">Yes</button>
+            </div>
+
+            <div class="button-wrapper">
+                <div class="button-label">NO</div>
+                <button class="no-btn" id="noBtn" onclick="handleNo()">No</button>
+            </div>
         </div>
 
         <div class="success-message" id="successMsg">
@@ -183,23 +235,30 @@
         const noBtn = document.getElementById('noBtn');
         const container = document.getElementById('container');
         const successMsg = document.getElementById('successMsg');
-        const buttonGroup = document.getElementById('buttonGroup');
+        const buttonContainer = document.getElementById('buttonContainer');
         const mainMessage = document.getElementById('mainMessage');
         const heartBg = document.getElementById('heartBg');
 
-        function handleNo() {
-            // Random position on screen
-            const randomX = Math.random() * (window.innerWidth - 100);
-            const randomY = Math.random() * (window.innerHeight - 50);
+        function getRandomPosition() {
+            const randomX = Math.random() * (window.innerWidth - 150);
+            const randomY = Math.random() * (window.innerHeight - 80);
+            return { x: randomX, y: randomY };
+        }
 
-            noBtn.style.position = 'fixed';
-            noBtn.style.left = randomX + 'px';
-            noBtn.style.top = randomY + 'px';
+        function handleNo() {
+            // Make button float
+            noBtn.classList.add('floating');
+            
+            // Get random position
+            const pos = getRandomPosition();
+            
+            noBtn.style.left = pos.x + 'px';
+            noBtn.style.top = pos.y + 'px';
         }
 
         function handleYes() {
             // Hide buttons and show success message
-            buttonGroup.style.display = 'none';
+            buttonContainer.style.display = 'none';
             mainMessage.style.display = 'none';
             successMsg.style.display = 'block';
 
@@ -238,10 +297,13 @@
             }
         }
 
-        // Make sure No button doesn't go off screen
-        noBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            handleNo();
+        // Make sure No button doesn't go off screen and moves continuously
+        noBtn.addEventListener('mouseenter', function(e) {
+            if (!noBtn.classList.contains('floating')) {
+                const pos = getRandomPosition();
+                noBtn.style.left = pos.x + 'px';
+                noBtn.style.top = pos.y + 'px';
+            }
         });
     </script>
 </body>
