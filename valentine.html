@@ -1,24 +1,30 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Valentine Page</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Valentine's Day</title>
     <style>
         .button-container {
             display: flex;
-            justify-content: space-between;
-            padding: 20px;
-        }
-        .button {
-            padding: 10px 20px;
-            font-size: 16px;
+            justify-content: center;
+            gap: 15px; /* spacing between buttons */
         }
     </style>
 </head>
 <body>
-    <h1>Will you be my Valentine?</h1>
+    <h1>Valentine's Day Special</h1>
     <div class="button-container">
-        <button class="button" style="background-color: green; color: white;">YES</button>
-        <button class="button" style="background-color: red; color: white;">NO</button>
+        <button type="button" onclick="yesFunction()">Yes</button>
+        <button type="button" onclick="noFunction()">No</button>
     </div>
+    <script>
+        function yesFunction() {
+            alert('You clicked Yes!');
+        }
+        function noFunction() {
+            alert('You clicked No!');
+        }
+    </script>
 </body>
 </html>
