@@ -3,28 +3,81 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Valentine's Day</title>
+    <title>Happy Valentine's Day</title>
     <style>
-        .button-container {
+        body {
+            font-family: Arial, sans-serif;
             display: flex;
             justify-content: center;
-            gap: 15px; /* spacing between buttons */
+            align-items: center;
+            height: 100vh;
+            background: #f8e6e3;
+            overflow: hidden;
+        }
+        .container {
+            text-align: center;
+        }
+        .button {
+            padding: 10px 20px;
+            font-size: 16px;
+            margin: 10px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+        .yes {
+            background: #ff6f61;
+            color: white;
+        }
+        .no {
+            background: #61bfff;
+            color: white;
+        }
+        .success-message {
+            display: none;
+            margin-top: 20px;
+            font-size: 20px;
+            color: green;
+        }
+        .heart {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background: url('https://cdn2.iconfinder.com/data/icons/love-4/128/Heart_Love_Love_Heart-512.png') no-repeat center center;
+            background-size: contain;
         }
     </style>
 </head>
 <body>
-    <h1>Valentine's Day Special</h1>
-    <div class="button-container">
-        <button type="button" onclick="yesFunction()">Yes</button>
-        <button type="button" onclick="noFunction()">No</button>
+    <div class="container">
+        <h1>Will you be my Valentine?</h1>
+        <button class="button yes">Yes</button>
+        <button class="button no">No</button>
+        <div class="success-message">Yay! I knew it! ❤️</div>
     </div>
     <script>
-        function yesFunction() {
-            alert('You clicked Yes!');
-        }
-        function noFunction() {
-            alert('You clicked No!');
-        }
+        document.querySelector('.yes').addEventListener('click', function() {
+            document.querySelector('.success-message').style.display = 'block';
+            createConfetti();
+        });
+        const createConfetti = () => {
+            const confettiColors = ['#ff0', '#ff6f61', '#61bfff'];
+            for (let i = 0; i < 100; i++) {
+                createHeart();
+            }
+        };
+        const createHeart = () => {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.style.left = Math.random() * window.innerWidth + 'px';
+            heart.style.animation = 'float 3s forwards';
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 3000);
+        };
+        document.querySelector('.no').addEventListener('click', function() {
+            alert('Oh no! Maybe next time.');
+        });
     </script>
 </body>
 </html>
