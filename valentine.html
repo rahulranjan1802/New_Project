@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Will You Be My Valentine?</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            overflow: hidden;
+        }
+
+        /* Floating background hearts */
+        .heart-background {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            z-index: -1;
+        }
+
+        .heart-background.active {
+            opacity: 1;
+        }
+
+        .heart {
+            position: absolute;
+            font-size: 2rem;
+            color: rgba(255, 105, 180, 0.6);
+            animation: float 6s infinite;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0px) translateX(0px) rotate(0deg);
+                opacity: 1;
+            }
+            50% {
+                transform: translateY(-200px) translateX(50px) rotate(180deg);
+            }
+            100% {
+                transform: translateY(-400px) translateX(-50px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .container {
+            text-align: center;
+            background: white;
+            padding: 60px 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            z-index: 10;
+            position: relative;
+        }
+
+        .message {
+            font-size: 2.5rem;
+            color: #ff1493;
+            margin-bottom: 40px;
+            font-weight: bold;
+        }
+
+        .question {
+            font-size: 1.5rem;
+            color: #333;
+            margin-bottom: 40px;
+            line-height: 1.6;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            position: relative;
+        }
+
+        button {
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: white;
+            position: relative;
+            z-index: 5;
+        }
+
+        .yes-btn {
+            background: linear-gradient(135deg, #ff1493, #ff69b4);
+        }
+
+        .yes-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 5px 20px rgba(255, 20, 147, 0.4);
+        }
+
+        .no-btn {
+            background: linear-gradient(135deg, #4a90e2, #357abd);
+            position: absolute;
+            transition: all 0.1s ease;
+        }
+
+        .no-btn:hover {
+            transform: scale(1.05);
+        }
+
+        /* Success message styles */
+        .success-message {
+            display: none;
+            font-size: 2rem;
+            color: #ff1493;
+            animation: popIn 0.6s ease;
+            font-weight: bold;
+            line-height: 1.8;
+        }
+
+        @keyframes popIn {
+            0% {
+                transform: scale(0);
+                opacity: 0;
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: #ff1493;
+            pointer-events: none;
+            animation: confetti-fall 3s ease-in forwards;
+        }
+
+        @keyframes confetti-fall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="heart-background" id="heartBg"></div>
+
+    <div class="container" id="container">
+        <div class="message" id="mainMessage">❤️ Will you be my Valentine? ❤️</div>
+
+        <div class="button-group" id="buttonGroup">
+            <button class="yes-btn" onclick="handleYes()">Yes</button>
+            <button class="no-btn" id="noBtn" onclick="handleNo()">No</button>
+        </div>
+
+        <div class="success-message" id="successMsg">
+            YaYY ❤️! Thank you for being my Valentine.<br>I Love you ❤️
+        </div>
+    </div>
+
+    <script>
+        const noBtn = document.getElementById('noBtn');
+        const container = document.getElementById('container');
+        const successMsg = document.getElementById('successMsg');
+        const buttonGroup = document.getElementById('buttonGroup');
+        const mainMessage = document.getElementById('mainMessage');
+        const heartBg = document.getElementById('heartBg');
+
+        function handleNo() {
+            // Random position on screen
+            const randomX = Math.random() * (window.innerWidth - 100);
+            const randomY = Math.random() * (window.innerHeight - 50);
+
+            noBtn.style.position = 'fixed';
+            noBtn.style.left = randomX + 'px';
+            noBtn.style.top = randomY + 'px';
+        }
+
+        function handleYes() {
+            // Hide buttons and show success message
+            buttonGroup.style.display = 'none';
+            mainMessage.style.display = 'none';
+            successMsg.style.display = 'block';
+
+            // Activate background hearts
+            heartBg.classList.add('active');
+
+            // Create floating hearts
+            createFloatingHearts();
+
+            // Create confetti
+            createConfetti();
+        }
+
+        function createFloatingHearts() {
+            for (let i = 0; i < 20; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'heart';
+                heart.textContent = '❤️';
+                heart.style.left = Math.random() * 100 + '%';
+                heart.style.bottom = '-50px';
+                heart.style.animationDelay = Math.random() * 2 + 's';
+                heartBg.appendChild(heart);
+            }
+        }
+
+        function createConfetti() {
+            for (let i = 0; i < 50; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * window.innerWidth + 'px';
+                confetti.style.top = '-10px';
+                confetti.style.animationDelay = Math.random() * 0.5 + 's';
+                document.body.appendChild(confetti);
+
+                setTimeout(() => confetti.remove(), 3000);
+            }
+        }
+
+        // Make sure No button doesn't go off screen
+        noBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            handleNo();
+        });
+    </script>
+</body>
+</html>
