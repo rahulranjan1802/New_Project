@@ -3,108 +3,114 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Valentine's Day</title>
+    <title>Valentine's Day Celebration</title>
     <style>
         body {
-            background: linear-gradient(45deg, #ff6e7f, #bfe9ff);
+            margin: 0;
+            height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            background: linear-gradient(to bottom, #6a0dad, #ff69b4);
             overflow: hidden;
-            font-family: Arial, sans-serif;
         }
-        h1 {
-            color: white;
-            font-size: 2.5em;
-            margin-bottom: 20px;
+        .heart {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background-color: red;
+            transform: rotate(45deg);
+            animation: float 6s ease-in-out infinite;
         }
-        .buttons {
-            display: flex;
-            gap: 20px;
+        .heart::before, .heart::after {
+            content: ''; 
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background-color: red;
+            border-radius: 50%;
+        }
+        .heart::before {
+            top: -25px;
+            left: 0;
+        }
+        .heart::after {
+            left: 25px;
+            top: 0;
+        }
+        @keyframes float {
+            0% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+            100% {
+                transform: translateY(0);
+            }
         }
         .button {
             padding: 10px 20px;
-            font-size: 1.5em;
+            margin: 0 10px;
             border: none;
+            border-radius: 5px;
+            font-size: 16px;
             cursor: pointer;
-            border-radius: 8px;
+            transition: transform 0.5s;
         }
         .yes {
-            background-color: #ff4c4c;
+            background-color: #4caf50;
             color: white;
         }
         .no {
-            background-color: #4c8cff;
+            background-color: #f44336;
             color: white;
         }
-        #confetti {
+        .confetti {
             position: absolute;
-            top: 0;
-            height: 100%;
-            width: 100%;
-            pointer-events: none;
-            display: none;
+            width: 10px;
+            height: 10px;
+            background-color: rgba(255, 255, 0, 0.7);
+            animation: confetti-fall 1s infinite;
+            opacity: 0;
         }
-        #message {
-            display: none;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(255, 255, 255, 0.8);
-            padding: 20px;
-            border-radius: 8px;
-            text-align: center;
-            z-index: 10;
+        @keyframes confetti-fall {
+            0% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh);
+                opacity: 0;
+            }
         }
     </style>
 </head>
 <body>
-    <div>
-        <h1>Will you be my Valentine? 💕💕</h1>
-        <div class="buttons">
-            <button class="button yes">✔️</button>
-            <button class="button no">❌</button>
-        </div>
-        <div id="confetti"></div>
-        <div id="message"></div>
+    <div class="heart" style="top: 10%; left: 20%;"></div>
+    <div class="heart" style="top: 20%; left: 60%;"></div>
+    <div class="heart" style="top: 50%; left: 40%;"></div>
+    <div class="buttons">
+        <button class="button yes" onclick="showSuccess()">Yes</button>
+        <button class="button no" onclick="floatAway()">No</button>
     </div>
-
     <script>
-        const yesButton = document.querySelector('.yes');
-        const noButton = document.querySelector('.no');
-        const message = document.getElementById('message');
-        const confettiDiv = document.getElementById('confetti');
-
-        yesButton.addEventListener('click', () => {
-            message.innerHTML = "YaYY ❤️! Thank you for being my Valentine. I Love you ❤️";
-            message.style.display = 'block';
-            confettiDiv.style.display = 'block';
-            launchConfetti();
-        });
-
-        noButton.addEventListener('click', () => {
-            noButton.style.position = 'absolute';
-            noButton.style.top = Math.random() * 100 + '%';
-            noButton.style.left = Math.random() * 100 + '%';
-        });
-
-        function launchConfetti() {
-            // Simple confetti animation
-            for (let i = 0; i < 100; i++) {
-                const confettiPiece = document.createElement('span');
-                confettiPiece.style.position = 'absolute';
-                confettiPiece.style.width = '10px';
-                confettiPiece.style.height = '10px';
-                confettiPiece.style.backgroundColor = Math.random() < 0.5 ? '#ff4c4c' : '#4c8cff';
-                confettiPiece.style.top = Math.random() * 100 + '%';
-                confettiPiece.style.left = Math.random() * 100 + '%';
-                document.body.appendChild(confettiPiece);
-                setTimeout(() => {
-                    confettiPiece.remove();
-                }, 2000);
-            }
+        function showSuccess() {
+            alert('Success! Happy Valentine\'s Day!');
+        }
+        function floatAway() {
+            var noButton = document.querySelector('.no');
+            noButton.style.transform = 'translateX(100vw)';
+            noButton.style.transition = 'transform 2s ease-in-out';
+        }
+        
+        // Generate confetti
+        for (let i = 0; i < 100; i++) {
+            let confetti = document.createElement('div');
+            confetti.className = 'confetti';
+            confetti.style.left = Math.random() * 100 + 'vw';
+            confetti.style.animationDelay = Math.random() * 2 + 's';
+            document.body.appendChild(confetti);
         }
     </script>
 </body>
